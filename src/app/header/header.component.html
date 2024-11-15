@@ -1,0 +1,83 @@
+<div class="header">
+    <form>
+        <div class="row items-start">
+            <div class="col col-md-2">
+                <div>
+                    <label for="db" class="form-label">Banco de Dados</label>
+                    <select name="db" id="db" class="form-select">
+                        <option value="Oracle">Oracle</option>
+                        <option value="Aurora">Aurora</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col col-md-2">
+                <div>
+                    <label for="query" class="form-label">Tipo de Query</label>
+                    <select name="query" id="query" class="form-select">
+                        <option value="Select">Select</option>
+                        <option value="Update">Update</option>
+                        <option value="Delete">Delete</option>
+                        <option value="Insert">Insert</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col col-md-2">
+                <div>
+                    <label for="table" class="form-label">Tipo de Tabela</label>
+                    <input name="table" id="table" class="form-control" type="text" />
+                </div>
+            </div>
+            <div class="col col-md-2">
+                <div>
+                    <label for="show-columns" class="form-label">Exibir Colunas</label>
+                    <select name="show-columns" id="show-columns" class="form-select">
+                        <option value="true">Sim</option>
+                        <option value="false">Não</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col col-md-2">
+                <div>
+                    <label for="columns" class="form-label">Adicionar Colunas</label>
+                    @for (column of columns; track $index; let i = $index) {
+                    <div class="d-flex gap-2 mb-2">
+                        <input [name]="column.id" [id]="column.id" class="form-control" placeholder="Nome da Coluna" />
+                        <button class="btn btn-danger" (click)="removeColumnField(i)" type="button"
+                            *ngIf="i !== 0">X</button>
+                    </div>
+                    }
+                    <button class="btn btn-success" (click)="addColumnField(columns.length)" type="button">Adicionar
+                        Coluna</button>
+                </div>
+            </div>
+        </div>
+        <div class="row items-start">
+            <div class="col col-md-2">
+                <div>
+                    <label for="columns" class="form-label">Colunas do Where</label>
+                    @for (column of whereColumns; track $index; let i = $index) {
+                    <div class="d-flex gap-2 mb-2">
+                        <input [name]="column.id" [id]="column.id" class="form-control" placeholder="Nome da Coluna" />
+                        <button class="btn btn-danger" (click)="removeWhereColumnsField(i)" type="button"
+                            *ngIf="i !== 0">X</button>
+                    </div>
+                    }
+                    <button class="btn btn-success" (click)="addWhereColumnsField(columns.length)"
+                        type="button">Adicionar
+                        Coluna</button>
+                </div>
+            </div>
+            <div class="col col-md-2">
+                <div>
+                    <label for="operator" class="form-label">Tipo de Operação</label>
+                    <select name="operator" id="operator" class="form-select">
+                        <option value="&rsaquo;">&rsaquo;</option>
+                        <option value="=">=</option>
+                        <option value="&lsaquo;">&lsaquo;</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col col-md-2"></div>
+        </div>
+    </form>
+</div>
