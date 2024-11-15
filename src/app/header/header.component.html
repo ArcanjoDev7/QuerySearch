@@ -1,135 +1,97 @@
 <div class="header">
-  <form>
-    <div class="row items-start">
-      <div class="col col-md-2">
-        <div>
-          <label for="db" class="form-label">Banco de Dados</label>
-          <select name="db" id="db" class="form-select">
-            <option value="Oracle">Oracle</option>
-            <option value="Aurora">Aurora</option>
-          </select>
+    <form>
+        <div class="row items-start">
+            <div class="col col-md-2">
+                <div>
+                    <label for="db" class="form-label">Banco de Dados</label>
+                    <select name="db" id="db" class="form-select">
+                        <option value="Oracle">Oracle</option>
+                        <option value="Aurora">Aurora</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col col-md-2">
+                <div>
+                    <label for="query" class="form-label">Tipo de Query</label>
+                    <select name="query" id="query" class="form-select">
+                        <option value="Select">Select</option>
+                        <option value="Update">Update</option>
+                        <option value="Delete">Delete</option>
+                        <option value="Insert">Insert</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col col-md-2">
+                <div>
+                    <label for="table" class="form-label">Nome da Tabela</label>
+                    <input name="table" id="table" class="form-control" type="text" />
+                </div>
+            </div>
+            <div class="col col-md-2">
+                <div>
+                    <label for="show-columns" class="form-label">Exibir Colunas</label>
+                    <select name="show-columns" id="show-columns" class="form-select">
+                        <option value="true">Sim</option>
+                        <option value="false">Não</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col col-md-2">
+                <div>
+                    <label for="columns" class="form-label">Adicionar Colunas</label>
+                    @for (column of columns; track $index; let i = $index) {
+                    <div class="d-flex gap-2 mb-2">
+                        <input [name]="column.id" [id]="column.id" class="form-control" placeholder="Nome da Coluna" />
+                        <button class="btn btn-danger" (click)="removeColumnField(i)" type="button" *ngIf="i !== 0">
+                            X
+                        </button>
+                    </div>
+                    }
+                    <button class="btn btn-success" (click)="addColumnField(columns.length)" type="button">
+                        Adicionar Coluna
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col col-md-2">
-        <div>
-          <label for="query" class="form-label">Tipo de Query</label>
-          <select name="query" id="query" class="form-select">
-            <option value="Select">Select</option>
-            <option value="Update">Update</option>
-            <option value="Delete">Delete</option>
-            <option value="Insert">Insert</option>
-          </select>
+        @for(item of conditions; track $index; let i = $index) {
+        <div class="row items-start mb-3">
+            <div class="col col-md-2">
+                <label [htmlFor]="item.column" class="form-label">Coluna</label>
+                <input [name]="item.column" [id]="item.column" class="form-control" placeholder="Coluna" />
+            </div>
+            <div class="col col-md-2">
+                <div>
+                    <label [for]="item.operation" class="form-label">Tipo de Operação</label>
+                    <select [name]="item.operation" [id]="item.operation" class="form-select">
+                        <option value="&rsaquo;">&rsaquo;</option>
+                        <option value="=">=</option>
+                        <option value="&lsaquo;">&lsaquo;</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col col-md-2">
+                <label [htmlFor]="item.column" class="form-label">Valor</label>
+                <input [name]="item.value" [id]="item.value" class="form-control" placeholder="Valor" />
+            </div>
+            <div class="col col-md-2" *ngIf="i !== 0">
+                <label style="opacity: 0">Coluna</label>
+                <div>
+                    <button type="button" class="btn btn-danger" (click)="removeWhereCondition(i)">
+                        X
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col col-md-2">
-        <div>
-          <label for="table" class="form-label">Nome da Tabela</label>
-          <input name="table" id="table" class="form-control" type="text" />
-        </div>
-      </div>
-      <div class="col col-md-2">
-        <div>
-          <label for="show-columns" class="form-label">Exibir Colunas</label>
-          <select name="show-columns" id="show-columns" class="form-select">
-            <option value="true">Sim</option>
-            <option value="false">Não</option>
-          </select>
-        </div>
-      </div>
-      <div class="col col-md-2">
-        <div>
-          <label for="columns" class="form-label">Adicionar Colunas</label>
-          @for (column of columns; track $index; let i = $index) {
-          <div class="d-flex gap-2 mb-2">
-            <input
-              [name]="column.id"
-              [id]="column.id"
-              class="form-control"
-              placeholder="Nome da Coluna"
-            />
-            <button
-              class="btn btn-danger"
-              (click)="removeColumnField(i)"
-              type="button"
-              *ngIf="i !== 0"
-            >
-              X
-            </button>
-          </div>
-          }
-          <button
-            class="btn btn-success"
-            (click)="addColumnField(columns.length)"
-            type="button"
-          >
-            Adicionar Coluna
-          </button>
-        </div>
-      </div>
-    </div>
-    @for(item of conditions; track $index; let i = $index) {
-    <div class="row items-start mb-3">
-      <div class="col col-md-2">
-        <label [htmlFor]="item.column" class="form-label">Coluna</label>
-        <input
-          [name]="item.column"
-          [id]="item.column"
-          class="form-control"
-          placeholder="Coluna"
-        />
-      </div>
-      <div class="col col-md-2">
-        <div>
-          <label [for]="item.operation" class="form-label"
-            >Tipo de Operação</label
-          >
-          <select
-            [name]="item.operation"
-            [id]="item.operation"
-            class="form-select"
-          >
-            <option value="&rsaquo;">&rsaquo;</option>
-            <option value="=">=</option>
-            <option value="&lsaquo;">&lsaquo;</option>
-          </select>
-        </div>
-      </div>
-      <div class="col col-md-2">
-        <label [htmlFor]="item.column" class="form-label">Valor</label>
-        <input
-          [name]="item.value"
-          [id]="item.value"
-          class="form-control"
-          placeholder="Valor"
-        />
-      </div>
-      <div class="col col-md-2" *ngIf="i !== 0">
-        <label style="opacity: 0">Coluna</label>
-        <div>
-          <button
-            type="button"
-            class="btn btn-danger"
-            (click)="removeWhereCondition(i)"
-          >
-            X
-          </button>
-        </div>
-      </div>
-    </div>
-    }
-    <button
-      class="btn btn-success mt-2"
-      (click)="addWhereCondition(conditions.length)"
-      type="button"
-    >
-      Adicionar condição
-    </button>
-    <hr />
-    <button class="btn btn-primary" type="button" (click)="submit()">
-      Confirmar
-    </button>
-  </form>
+        }
+        <button class="btn btn-success mt-2" (click)="addWhereCondition(conditions.length)" type="button">
+            Adicionar condição
+        </button>
+        <hr />
+        <button class="btn btn-primary" type="button" (click)="submit()">
+            Confirmar
+        </button>
+    </form>
 </div>
-<div class="query-preview">
-  <p>SELECT * FROM users WHERE email = 'suamaeaquelagorda&#64;gmail.com'</p>
+<div class="query-preview" *ngIf="query !== ''">
+    <p>{{ query }}</p>
 </div>
