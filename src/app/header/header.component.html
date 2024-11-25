@@ -1,10 +1,10 @@
 <div class="header">
-    <form>
+    <form [formGroup]="queryForm" (ngSubmit)="submit()">
         <div class="row items-start">
             <div class="col col-md-2">
                 <div>
                     <label for="db" class="form-label">Banco de Dados</label>
-                    <select name="db" id="db" class="form-select">
+                    <select id="db" class="form-select" formControlName="db">
                         <option value="Oracle">Oracle</option>
                         <option value="Aurora">Aurora</option>
                     </select>
@@ -13,7 +13,7 @@
             <div class="col col-md-2">
                 <div>
                     <label for="query" class="form-label">Tipo de Query</label>
-                    <select name="query" id="query" class="form-select">
+                    <select id="query" class="form-select" formControlName="query">
                         <option value="Select">Select</option>
                         <option value="Update">Update</option>
                         <option value="Delete">Delete</option>
@@ -24,13 +24,13 @@
             <div class="col col-md-2">
                 <div>
                     <label for="table" class="form-label">Nome da Tabela</label>
-                    <input name="table" id="table" class="form-control" type="text" />
+                    <input id="table" class="form-control" type="text" formControlName="table" />
                 </div>
             </div>
             <div class="col col-md-2">
                 <div>
-                    <label for="show-columns" class="form-label">Exibir Colunas</label>
-                    <select name="show-columns" id="show-columns" class="form-select">
+                    <label for="showColumns" class="form-label">Exibir Colunas</label>
+                    <select id="showColumns" class="form-select" formControlName="showColumns">
                         <option value="true">Sim</option>
                         <option value="false">Não</option>
                     </select>
@@ -38,31 +38,29 @@
             </div>
             <div class="col col-md-2">
                 <div>
-                    <label for="columns" class="form-label">Adicionar Colunas</label>
-                    @for (column of columns; track $index; let i = $index) {
-                    <div class="d-flex gap-2 mb-2">
-                        <input [name]="column.id" [id]="column.id" class="form-control" placeholder="Nome da Coluna" />
-                        <button class="btn btn-danger" (click)="removeColumnField(i)" type="button" *ngIf="i !== 0">
+                    <label class="form-label">Adicionar Colunas</label>
+                    <div *ngFor="let column of columns.controls; let i = index" class="d-flex gap-2 mb-2">
+                        <input class="form-control" placeholder="Nome da Coluna" [formControlName]="i" />
+                        <button class="btn btn-danger" type="button" (click)="removeColumnField(i)" *ngIf="i !== 0">
                             X
                         </button>
                     </div>
-                    }
-                    <button class="btn btn-success" (click)="addColumnField(columns.length)" type="button">
+                    <button class="btn btn-success" type="button" (click)="addColumnField()">
                         Adicionar Coluna
                     </button>
                 </div>
             </div>
         </div>
-        @for(item of conditions; track $index; let i = $index) {
-        <div class="row items-start mb-3">
+
+        <div *ngFor="let condition of conditions.controls; let i = index" class="row items-start mb-3">
             <div class="col col-md-2">
-                <label [htmlFor]="item.column" class="form-label">Coluna</label>
-                <input [name]="item.column" [id]="item.column" class="form-control" placeholder="Coluna" />
+                <label class="form-label">Coluna</label>
+                <input class="form-control" placeholder="Coluna" formControlName="column" formControlName="condition" />
             </div>
             <div class="col col-md-2">
                 <div>
-                    <label [for]="item.operation" class="form-label">Tipo de Operação</label>
-                    <select [name]="item.operation" [id]="item.operation" class="form-select">
+                    <label class="form-label">Tipo de Operação</label>
+                    <select class="form-select" formControlName="operation" formControlName="condition">
                         <option value="&rsaquo;">&rsaquo;</option>
                         <option value="=">=</option>
                         <option value="&lsaquo;">&lsaquo;</option>
@@ -70,26 +68,18 @@
                 </div>
             </div>
             <div class="col col-md-2">
-                <label [htmlFor]="item.column" class="form-label">Valor</label>
-                <input [name]="item.value" [id]="item.value" class="form-control" placeholder="Valor" />
+                <label class="form-label">Valor</label>
+                <input class="form-control" placeholder="Valor" formControlName="value" formControlName="condition" />
             </div>
             <div class="col col-md-2" *ngIf="i !== 0">
-                <label style="opacity: 0">Coluna</label>
-                <div>
-                    <button type="button" class="btn btn-danger" (click)="removeWhereCondition(i)">
-                        X
-                    </button>
-                </div>
+                <label style="opacity: 0">Remover</label>
+                <button type="button" class="btn btn-danger" (click)="removeWhereCondition(i)">X</button>
             </div>
         </div>
-        }
-        <button class="btn btn-success mt-2" (click)="addWhereCondition(conditions.length)" type="button">
-            Adicionar condição
-        </button>
+
+        <button class="btn btn-success mt-2" type="button" (click)="addWhereCondition()">Adicionar condição</button>
         <hr />
-        <button class="btn btn-primary" type="button" (click)="submit()">
-            Confirmar
-        </button>
+        <button class="btn btn-primary" type="submit">Confirmar</button>
     </form>
 </div>
 <div class="query-preview" *ngIf="query !== ''">
