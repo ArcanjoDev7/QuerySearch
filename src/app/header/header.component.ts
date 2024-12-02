@@ -135,6 +135,7 @@ export class HeaderComponent implements OnInit {
 
 
     submit(): void {
+        console.log(this.queryForm.value);
         if (this.queryForm.valid) {
             const queryType = this.queryForm.get('query')?.value ?? 'Select';
             const tableName = this.queryForm.get('table')?.value ?? '';

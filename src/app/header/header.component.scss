@@ -5,137 +5,192 @@ $gray-dark: #333333;
 $font-family: 'Helvetica Neue', sans-serif;
 
 body {
-    font-family: $font-family;
-    background-color: $gray-light;
+  font-family: $font-family;
+  background-color: $gray-light;
 }
 
 label.form-label {
-    font-weight: bold;
-    color: $gray-dark;
-    font-size: 14px;
+  font-weight: bold;
+  color: $gray-dark;
+  font-size: 14px;
 }
 
 input.form-control,
 select.form-select {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 button {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .header {
-    margin-top: 30px;
-    border: 2px solid #CCC;
-    padding: 30px;
-    border-radius: 10px;
+  margin-top: 30px;
+  border: 2px solid #CCC;
+  padding: 30px;
+  border-radius: 10px;
 
 }
 
 label.form-label {
-    font-size: 14px;
-    color: $gray-dark;
-    font-weight: bold;
+  font-size: 14px;
+  color: $gray-dark;
+  font-weight: bold;
 }
 
 .form-select,
 .form-control {
-    border-radius: 14px;
-    border: 1px solid #ddd;
-    box-shadow: none;
-    padding: 10px;
-    font-size: 14px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  box-shadow: none;
+  padding: 10px;
+  font-size: 14px;
 }
 
 .form-select:focus,
 .form-control:focus {
-    border-color: $red-color;
-    box-shadow: 0 0 0 0.2rem rgba(230, 0, 18, 0.25);
+  border-color: $red-color;
+  box-shadow: 0 0 0 0.2rem rgba(230, 0, 18, 0.25);
 }
 
 .btn {
-    font-weight: bold;
-    padding: 8px 16px;
-    border-radius: 4px;
-    transition: all 0.3 ease;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3 ease;
 }
 
 .btn-primary {
-    background-color: $red-color;
-    border-color: $red-color;
-    color: $white-color;
+  background-color: $red-color;
+  border-color: $red-color;
+  color: $white-color;
 
-    &:hover {
-        background-color: darken($red-color, 10%);
-        border-color: darken($red-color, 10%);
-    }
+  &:hover {
+    background-color: darken($red-color, 10%);
+    border-color: darken($red-color, 10%);
+  }
 }
 
 .btn-success {
-    background-color: #28a745;
-    border-color: #28a745;
-    color: $white-color;
+  background-color: #28a745;
+  border-color: #28a745;
+  color: $white-color;
 
-    &:hover {
-        background-color: darken(#28a745, 10%);
-        border-color: darken(#28a745, 10%);
-    }
+  &:hover {
+    background-color: darken(#28a745, 10%);
+    border-color: darken(#28a745, 10%);
+  }
 }
 
 .btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-    color: $white-color;
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: $white-color;
 
-    &:hover {
-        background-color: darken(#dc3545, 10%);
-        border-color: darken(#dc3545, 10%);
-    }
+  &:hover {
+    background-color: darken(#dc3545, 10%);
+    border-color: darken(#dc3545, 10%);
+  }
 }
 
 input.form-control,
 select.form-select {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 button {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .query-preview {
-    background-color: $white-color;
-    border: 1px solid #CCC;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border-radius: 5px;
-    padding: 5px;
+  background-color: $white-color;
+  border: 1px solid #CCC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
 
-    p {
-        margin: 0;
-    }
+  p {
+    margin: 0;
+  }
 }
 
 button.btn-danger {
-    background-color: #f44336;
-    border-color: #f44336;
-    color: $white-color;
+  background-color: #f44336;
+  border-color: #f44336;
+  color: $white-color;
 }
 
 form {
-    width: 100%;
+  width: 100%;
 }
 
 // update/insert additional buttons
 .buttons-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
 
-    button {
-        flex-grow: 1;
-        min-width: 190px !important;
-    }
+  button {
+    flex-grow: 1;
+    min-width: 190px !important;
+  }
+}
+
+.selectop-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+
+  button {
+    flex-grow: 1;
+    min-width: 190px !important;
+  }
+}
+
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.col-md-2 {
+  flex: 1 1 calc(20% - 15px); // Ajuste para largura igual
+  min-width: 150px; // Evita que fique muito pequeno
+}
+
+.buttons-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+
+  .btn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+button {
+  margin-top: 10px;
+}
+
+header {
+  margin: 0 auto;
+  max-width: 1000px; // Ajuste centralizado no container principal
+}
+
+form {
+  padding: 20px;
+}
+
+input,
+select,
+button {
+  height: 45px; // Mantém altura uniforme
+  margin: 5px 0;
 }
