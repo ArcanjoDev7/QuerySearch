@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Query } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Api, Conditions, UpdateColumns, ViewColumns } from '../models/apiService';
 
 @Component({
     selector: 'app-header',
@@ -9,6 +10,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class HeaderComponent implements OnInit {
     public queryForm: FormGroup;
     public query: string = ""
+    apiService: any;
 
 
     public constructor(private fb: FormBuilder) {
@@ -17,9 +19,9 @@ export class HeaderComponent implements OnInit {
             query: ['', Validators.required],
             table: ['', Validators.required],
             showColumns: ['true', Validators.required],
-            columns: this.fb.array([]),
-            updateColumns: this.fb.array([]),
-            conditions: this.fb.array([]),
+            columns: this.fb.array([this.fb.group({ column: '', value: '' })]),
+            updateColumns: this.fb.array([this.fb.group({ column: '', value: '' })]),
+            conditions: this.fb.array([this.fb.group({ field: '', operator: '=', value: '' })]),
         });
     }
 
@@ -81,7 +83,7 @@ export class HeaderComponent implements OnInit {
         }
         return columns.join(", ");
     }
-    payloadSelect(tableName: string, queryType: string, query: any, column: any[], conditions: any[]) {
+    payloadSelect(tableName: string, queryType: string, query: string, column: ViewColumns[], conditions: Conditions[]) {
         console.log(column)
         return {
             table: tableName,
@@ -93,7 +95,7 @@ export class HeaderComponent implements OnInit {
         };
     }
 
-    payloadInsert(tableName: string, queryType: string, query: any, conditions: any[], updateColumns: any[]) {
+    payloadInsert(tableName: string, queryType: string, query: string, conditions: Conditions[], updateColumns: any[]) {
         console.log(conditions)
         return {
             table: tableName,
@@ -107,7 +109,7 @@ export class HeaderComponent implements OnInit {
     }
 
 
-    payloadUpdate(tableName: string, queryType: string, query: any, column: any[], conditions: any[], updateColumns: any[]) {
+    payloadUpdate(tableName: string, queryType: string, query: string, column: ViewColumns[], conditions: Conditions[], updateColumns: UpdateColumns[]) {
         return {
             table: tableName,
             typeQuery: queryType,
@@ -119,7 +121,7 @@ export class HeaderComponent implements OnInit {
         };
     }
 
-    payloadDelete(tableName: string, queryType: string, query: any, conditions: any[]) {
+    payloadDelete(tableName: string, queryType: string, query: string, conditions: Conditions[]) {
         return {
             table: tableName,
             typeQuery: queryType,
@@ -142,54 +144,74 @@ export class HeaderComponent implements OnInit {
             const column = this.getColumns().map(c => { return c.column });
             const updateColumns = this.getUpdateColumns();
             const conditions = this.getConditions();
+            if (this.queryForm.valid)
 
-            if (this.queryForm.valid) {
-                console.log(this.queryForm.value);
-            }
-
-
-            switch (queryType.toUpperCase()) {
-                case 'SELECT':
-                    if (column.length === 0 || column[0] === '') {
-                        this.query = `SELECT * FROM ${tableName}`;
-                    } else {
-                        this.query = `SELECT ${this.getColumnQueryPreview(column)} FROM ${tableName}`;
-                    }
-                    break;
-                case 'INSERT':
-                    this.query = `INSERT INTO ${tableName} (${updateColumns.map(col => `${col.column}`).join(', ')}) VALUES (${updateColumns.map(col => `'${col.value}'`).join(', ')})`;
-                    break;
-                case 'UPDATE':
-                    this.query = `UPDATE ${tableName} SET ${this.getColumnQueryPreview(column)} =1`;
-                    break;
-                case 'DELETE':
-                    this.query = `DELETE FROM ${tableName}`;
-                    console.log(tableName)
-                    break;
-            }
+                switch (queryType.toUpperCase()) {
+                    case 'SELECT':
+                        if (column.length === 0 || column[0] === '') {
+                            this.query = `SELECT * FROM ${tableName}`;
+                        } else {
+                            this.query = `SELECT ${this.getColumnQueryPreview(column)} FROM ${tableName}`;
+                        }
+                        break;
+                    case 'INSERT':
+                        this.query = `INSERT INTO ${tableName} (${updateColumns.map(col => `${col.column}`).join(', ')}) VALUES (${updateColumns.map(col => `'${col.value}'`).join(', ')})`;
+                        break;
+                    case 'UPDATE':
+                        this.query = `UPDATE ${tableName} SET ${this.getColumnQueryPreview(column)} =1`;
+                        break;
+                    case 'DELETE':
+                        this.query = `DELETE FROM ${tableName}`;
+                        console.log(tableName)
+                        break;
+                }
 
             const whereClause = this.mapCondition(conditions);
             if (whereClause && queryType.toUpperCase() !== 'INSERT') {
                 this.query += ` WHERE ${whereClause}`;
             }
-
-            console.log('Query gerada:', this.query);
         }
-    }
 
-    getColumns(): any[] {
+    }
+    submitConfirm(): void {
+    }
+    getColumns(): ViewColumns[] {
         return this.queryForm.get('columns')?.value as any[];
     }
-    getUpdateColumns(): any[] {
+    getUpdateColumns(): UpdateColumns[] {
         return this.queryForm.get('updateColumns')?.value as any[];
     }
-
-    getConditions(): any[] {
+    getConditions(): Conditions[] {
         return (this.queryForm.get('conditions') as FormArray).controls.map(c => c.value);
     }
-
-    mapCondition(conditions: any[]): string {
+    mapCondition(conditions: Conditions[]): string {
         return conditions.map(cond => `${cond.condition} ${cond.operator} '${cond.value}'`).join(' AND ');
     }
+    addColumnButtonLabel: string = "Adicionar Coluna";
+    addConditionButtonLabel: string = "Adicionar Condição";
 
+    updateButtonLabels(): void {
+        const queryType = this.queryForm.get('query')?.value;
+
+        switch (queryType) {
+            case 'Select':
+                this.addColumnButtonLabel = "Adicionar Coluna ao Select";
+                this.addConditionButtonLabel = "Adicionar Condição ao Select";
+                break;
+            case 'Update':
+                this.addColumnButtonLabel = "Adicionar Coluna ao Update";
+                this.addConditionButtonLabel = "Adicionar Condição ao Update";
+                break;
+            case 'Delete':
+                this.addConditionButtonLabel = "Adicionar Condição ao Delete";
+                break;
+            case 'Insert':
+                this.addColumnButtonLabel = "Adicionar Valores ao Insert";
+                break;
+            default:
+                this.addColumnButtonLabel = "Adicionar Coluna";
+                this.addConditionButtonLabel = "Adicionar Condição";
+                break;
+        }
+    }
 }

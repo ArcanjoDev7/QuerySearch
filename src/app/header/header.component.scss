@@ -53,13 +53,20 @@ label.form-label {
   box-shadow: 0 0 0 0.2rem rgba(230, 0, 18, 0.25);
 }
 
+// Ajuste para os botões
 .btn {
   font-weight: bold;
   padding: 8px 16px;
   border-radius: 4px;
-  transition: all 0.3 ease;
+  transition: all 0.3s ease;
+  display: flex; // Adicionado para usar flexbox
+  justify-content: center; // Alinha o texto horizontalmente
+  align-items: center; // Alinha o texto verticalmente
+  text-align: center; // Para garantir alinhamento centralizado
+  height: 45px; // Altura consistente
 }
 
+// Botões específicos
 .btn-primary {
   background-color: $red-color;
   border-color: $red-color;
@@ -91,6 +98,12 @@ label.form-label {
     background-color: darken(#dc3545, 10%);
     border-color: darken(#dc3545, 10%);
   }
+}
+
+// Para uma aparência mais consistente, defina um padding mínimo e máximo para os botões
+.buttons-row button {
+  min-width: 190px; // Garante que o botão não fique muito pequeno
+  height: 45px; // Altura uniforme para todos os botões
 }
 
 input.form-control,

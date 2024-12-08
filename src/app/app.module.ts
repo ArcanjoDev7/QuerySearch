@@ -11,10 +11,11 @@ import { HeaderComponent } from './header/header.component'; // Seu componente H
         HeaderComponent, // Adicione seus componentes aqui
     ],
     imports: [
-        BrowserModule,
         ReactiveFormsModule, // Importe o módulo para Reactive Forms
+        BrowserModule,
     ],
     providers: [],
-    bootstrap: [AppComponent], // Componente inicial da aplicação
+    bootstrap: [AppComponent],
+    // Componente inicial da aplicação
 })
 export class AppModule { }
