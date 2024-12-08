@@ -19,14 +19,14 @@ export class HeaderComponent implements OnInit {
             query: ['', Validators.required],
             table: ['', Validators.required],
             showColumns: ['true', Validators.required],
-            columns: this.fb.array([this.fb.group({ column: '', value: '' })]),
-            updateColumns: this.fb.array([this.fb.group({ column: '', value: '' })]),
-            conditions: this.fb.array([this.fb.group({ field: '', operator: '=', value: '' })]),
+            columns: this.fb.array([]),
+            updateColumns: this.fb.array([]),
+            conditions: this.fb.array([]),
         });
     }
 
     ngOnInit(): void {
-        this.addColumnField();
+
     }
     get columns(): FormArray {
         return this.queryForm.get('columns') as FormArray;
@@ -187,31 +187,5 @@ export class HeaderComponent implements OnInit {
     mapCondition(conditions: Conditions[]): string {
         return conditions.map(cond => `${cond.condition} ${cond.operator} '${cond.value}'`).join(' AND ');
     }
-    addColumnButtonLabel: string = "Adicionar Coluna";
-    addConditionButtonLabel: string = "Adicionar Condição";
 
-    updateButtonLabels(): void {
-        const queryType = this.queryForm.get('query')?.value;
-
-        switch (queryType) {
-            case 'Select':
-                this.addColumnButtonLabel = "Adicionar Coluna ao Select";
-                this.addConditionButtonLabel = "Adicionar Condição ao Select";
-                break;
-            case 'Update':
-                this.addColumnButtonLabel = "Adicionar Coluna ao Update";
-                this.addConditionButtonLabel = "Adicionar Condição ao Update";
-                break;
-            case 'Delete':
-                this.addConditionButtonLabel = "Adicionar Condição ao Delete";
-                break;
-            case 'Insert':
-                this.addColumnButtonLabel = "Adicionar Valores ao Insert";
-                break;
-            default:
-                this.addColumnButtonLabel = "Adicionar Coluna";
-                this.addConditionButtonLabel = "Adicionar Condição";
-                break;
-        }
-    }
 }

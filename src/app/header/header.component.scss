@@ -165,11 +165,11 @@ form {
   }
 }
 
-
 .row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; // Impede que os itens quebrem para a próxima linha
   gap: 15px;
+  justify-content: space-between; // Ajusta a distribuição dos itens
 }
 
 .col-md-2 {

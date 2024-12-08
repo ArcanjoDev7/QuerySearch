@@ -3,7 +3,6 @@
 <div class="header">
     <form [formGroup]="queryForm" (ngSubmit)="submit()">
         <div class="row flex-wrap">
-            <!-- Banco de Dados -->
             <div class="col col-md-2">
                 <label for="database" class="form-label">Banco de Dados</label>
                 <select id="database" class="form-select" formControlName="database">
@@ -11,22 +10,19 @@
                     <option value="Aurora">Aurora</option>
                 </select>
             </div>
-            <!-- Tipo de CRUD -->
             <div class="col col-md-2">
                 <label for="query" class="form-label">CRUD</label>
-                <select id="query" class="form-select" formControlName="query" (change)="updateButtonLabels()">
+                <select id="query" class="form-select" formControlName="query">
                     <option value="Select">Select</option>
                     <option value="Update">Update</option>
                     <option value="Delete">Delete</option>
                     <option value="Insert">Insert</option>
                 </select>
             </div>
-            <!-- Nome da Tabela -->
             <div class="col col-md-2">
                 <label for="table" class="form-label">Nome da Tabela</label>
                 <input id="table" class="form-control" type="text" formControlName="table" />
             </div>
-            <!-- Exibir Tabelas -->
             <div class="col col-md-2">
                 <label for="showColumns" class="form-label">Exibir Tabelas</label>
                 <select id="showColumns" class="form-select" formControlName="showColumns">
@@ -34,59 +30,69 @@
                 </select>
             </div>
         </div>
-
-        <!-- Campos Dinâmicos -->
-        <div class="col col-md-2 mt-3">
+        <div class="col col-md-2">
             <div class="buttons-row">
-                <button class="btn btn-success mt-2" type="button"
-                    *ngIf="queryForm.get('query')?.value === 'Select' || queryForm.get('query')?.value === 'Update'"
-                    (click)="addColumnField()">
-                    {{ addColumnButtonLabel }}
+                <button
+                    *ngIf="queryForm.get('query')?.value === 'Select' || queryForm.get('query')?.value === 'Update' "
+                    class="btn btn-success mt-2" type="button" (click)="addColumnField()">
+                    Adicionar Coluna
                 </button>
-                <button class="btn btn-success mt-2" type="button" *ngIf="
-                        queryForm.get('query')?.value === 'Delete' ||
-                        queryForm.get('query')?.value === 'Update' ||
-                        queryForm.get('query')?.value === 'Select'
-                    " (click)="addWhereCondition()">
-                    {{ addConditionButtonLabel }}
+                <button
+                    *ngIf="queryForm.get('query')?.value === 'Delete' || queryForm.get('query')?.value === 'Update' || queryForm.get('query')?.value === 'Select'"
+                    class="btn btn-success mt-2" (click)="addWhereCondition()" type="button">
+                    Adicionar condição
+                </button>
+                <button *ngIf="queryForm.get('query')?.value === 'Update' || queryForm.get('query')?.value === 'Inser'"
+                    class="btn btn-success" type="button" (click)="addUpdateColumn()">
+                    Adicionar Valores
                 </button>
             </div>
         </div>
-
-        <!-- Campos de Inserção -->
-        <div formArrayName="updateColumns">
-            <div class="col col-md-2 mt-3" *ngIf="
-                    queryForm.get('query')?.value === 'Insert' ||
-                    queryForm.get('query')?.value === 'Update'
-                ">
-                <div *ngFor="let updateColumn of updateColumns.controls; let i = index" class="row items-start mb-3">
-                    <div [formGroupName]="i">
+        <div formArrayName="columns">
+            <div class="col col-md-5"
+                *ngIf="queryForm.get('query')?.value === 'Select' || queryForm.get('query')?.value === 'Update' || queryForm.get('query')?.value === 'Delete'">
+                <div *ngFor="let column of columns.controls; let i = index" class="d-flex gap-2 mb-2">
+                    <div [formGroupName]="i" class="d-flex align-items-center">
                         <input class="form-control" formControlName="column" placeholder="Nome da Coluna" />
-                        <input class="form-control mt-2" placeholder="Valor" formControlName="value" />
-                        <button class="btn btn-danger mt-2" type="button" (click)="removeUpdateColumn(i)">
+                        <button class="btn btn-danger ms-2" type="button" (click)="removeColumnField(i)">
                             X
                         </button>
                     </div>
                 </div>
-                <button class="btn btn-success" type="button" (click)="addUpdateColumn()">Adicionar Valores</button>
             </div>
         </div>
-
-        <!-- Condições Dinâmicas -->
-        <div class="col col-md-2 mt-3" *ngIf="
+        <div formArrayName="updateColumns">
+            <div class="col col-md-2" *ngIf="queryForm.get('query')?.value === 'Insert'
+            || queryForm.get('query')?.value === 'Update'">
+                <div *ngFor="let updateColumn of updateColumns.controls; let i = index" class="row items-start mb-3">
+                    <div [formGroupName]="i">
+                        <input class="form-control" formControlName="column" placeholder="Nome da Coluna" />
+                        <input class="form-control" placeholder="Valor" formControlName="value" />
+                        <button class="btn btn-danger" type="button" (click)="removeUpdateColumn(i)">
+                            X
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row flex-wrap">
+            <div class="col-12" *ngIf="
                 queryForm.get('query')?.value === 'Select' ||
                 queryForm.get('query')?.value === 'Update' ||
                 queryForm.get('query')?.value === 'Delete'
-            ">
-            <div formArrayName="conditions">
-                <div *ngFor="let condition of conditions.controls; let i = index" class="row items-start mb-2">
-                    <div [formGroupName]="i">
-                        <div class="col col-md-2">
-                            <label class="form-label">Coluna</label>
-                            <input class="form-control" placeholder="Coluna" formControlName="condition" />
-                        </div>
-                        <div>
-                            <div class="col col-md-2">
+              ">
+                <div formArrayName="conditions" class="d-flex flex-wrap gap-3">
+                    <div *ngFor="let condition of conditions.controls; let i = index"
+                        class="d-flex align-items-center gap-3">
+                        <div [formGroupName]="i" class="d-flex align-items-center gap-3">
+                            <!-- Coluna -->
+                            <div class="col">
+                                <label class="form-label">Coluna</label>
+                                <input class="form-control" placeholder="Coluna" formControlName="condition" />
+                            </div>
+
+                            <!-- Tipo de Operação -->
+                            <div class="col">
                                 <label class="form-label">Tipo de Operação</label>
                                 <select class="form-select" formControlName="operator">
                                     <option value="&rsaquo;">&rsaquo;</option>
@@ -94,31 +100,32 @@
                                     <option value="&lsaquo;">&lsaquo;</option>
                                 </select>
                             </div>
-                            <div class="col col-md-2">
+
+                            <!-- Valor -->
+                            <div class="col">
                                 <label class="form-label">Valor</label>
                                 <input class="form-control" placeholder="Valor" formControlName="value" />
                             </div>
-                        </div>
-                        <div class="col col-md-2">
-                            <label style="opacity: 0">Remover</label>
-                            <button type="button" class="btn btn-danger" (click)="removeWhereCondition(i)">
-                                X
-                            </button>
+
+                            <!-- Botão Remover -->
+                            <div>
+                                <label style="opacity: 0">Remover</label>
+                                <button type="button" class="btn btn-danger" (click)="removeWhereCondition(i)">
+                                    X
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <hr />
         <button class="btn btn-primary" type="button" (click)="submitConfirm()">Exibir Query</button>
     </form>
     <hr />
-    <!-- Pré-visualização da Query -->
     <div class="query-preview" *ngIf="query !== ''">
         <p>{{ query }}</p>
         <div class="button-container">
-            <button class="btn btn-secondary" type="button" (click)="submit()">Confirmar</button>
+            <button class="btn btn-secundary" type="button" (click)="submit()">Confirmar</button>
         </div>
     </div>
-</div>
